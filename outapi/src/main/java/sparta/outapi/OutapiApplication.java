@@ -29,13 +29,14 @@ public class OutapiApplication {
 		Category category = new Category("cat");
 		List<String> photos = Arrays.asList("photo1,ptoto2");
 		List<Tag> tags = Arrays.asList(new Tag("cat"));
-		PetCreatResponse createResponse =  swaggerService.createPetData(
-				1L,
+		CreatePetRequest requestData = new CreatePetRequest(1L,
 				"sparta",
 				new Category("dog"),
 				photos,
 				tags,
 				"available");
+
+		PetCreatResponse createResponse =  swaggerService.createPetData(requestData);
 		PetResponse response = swaggerService.getPetData(createResponse.getId());
 		System.out.println("""
 				petId : %d
