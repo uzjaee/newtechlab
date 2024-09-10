@@ -11,14 +11,27 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import sparta.outapi.CreatePetRequest.Category;
+import sparta.outapi.CreatePetRequest.Tag;
 
 @Service
 public class SwaggerServiceImpl implements  SwaggerService{
 
   @Override
-  public PetCreatResponse createPetData(Long petId, String name) {
+  public PetCreatResponse createPetData(Long petId,
+      String name,
+      Category category,
+      List<String> photoUrls,
+      List<Tag> tags,
+      String status) {
     String url = "https://petstore.swagger.io/v2/pet/";
-    CreatePetRequest requestData = new CreatePetRequest(petId,name);
+    CreatePetRequest requestData = new CreatePetRequest(
+        petId,
+        name,
+        category,
+        photoUrls,
+        tags,
+        status);
 
     HttpEntity<CreatePetRequest> request = new HttpEntity<>(requestData);
 
