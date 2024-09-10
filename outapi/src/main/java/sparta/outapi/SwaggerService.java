@@ -7,12 +7,7 @@ import sparta.outapi.CreatePetRequest.Tag;
 
 public interface SwaggerService {
 
-  PetCreatResponse createPetData(Long petId,
-      String name,
-      Category category,
-      List<String> photoUrls,
-      List<Tag> tags,
-      String status);
+  PetCreatResponse createPetData(CreatePetRequest requestData);
   PetResponse getPetData(Long petId);
 
 }
