@@ -1,4 +1,4 @@
-package com.servce.securitylab.auth;
+package com.servce.securitylab.auth.util;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
