@@ -3,8 +3,10 @@ package com.servce.securitylab.auth.controller;
 import com.servce.securitylab.auth.controller.model.SignInRequest;
 import com.servce.securitylab.auth.controller.model.SignUpRequest;
 import com.servce.securitylab.auth.service.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import java.net.URI;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,9 +33,13 @@ public class AuthController {
         .toUri();
     return ResponseEntity.created(userUri).build();
   }
+
   @PostMapping("/sign-in")
-  ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest){
-    authService.authentication(signInRequest);
+  ResponseEntity<Void> signIn(
+      @RequestBody SignInRequest signInRequest,
+      HttpServletResponse res){
+    String accessToken = authService.authentication(signInRequest);
+    res.setHeader(HttpHeaders.AUTHORIZATION, accessToken);
     return ResponseEntity.ok().build();
   }
 

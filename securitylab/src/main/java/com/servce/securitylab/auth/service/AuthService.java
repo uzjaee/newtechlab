@@ -60,7 +60,6 @@ public class AuthService {
     if(!matches){
       throw new IllegalArgumentException(INVALID_AUTHENTICATION_ERROR_MESSAGE);
     }
-    //todo jwt 발급
     return new JwtProvider().provider(user.getId());
 
 
