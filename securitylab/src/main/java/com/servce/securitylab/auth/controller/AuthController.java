@@ -1,5 +1,6 @@
 package com.servce.securitylab.auth.controller;
 
+import com.servce.securitylab.auth.controller.model.SignInRequest;
 import com.servce.securitylab.auth.controller.model.SignUpRequest;
 import com.servce.securitylab.auth.service.AuthService;
 import java.net.URI;
@@ -22,13 +23,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AuthController {
   private final AuthService authService;
   @PostMapping("/sign-up")
-  ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
+  ResponseEntity<Void> signUp(@RequestBody SignUpRequest signUpRequest) {
     Long userId = authService.createUser(signUpRequest);
 
     URI  userUri = UriComponentsBuilder.fromUriString("/user/{userId}")
         .buildAndExpand(userId)
         .toUri();
     return ResponseEntity.created(userUri).build();
+  }
+  @PostMapping("/sign-in")
+  ResponseEntity<?> signIn(@RequestBody SignInRequest signInRequest){
+    authService.authentication(signInRequest);
+    return ResponseEntity.ok().build();
   }
 
 }
