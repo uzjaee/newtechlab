@@ -2,6 +2,7 @@ package com.servce.securitylab.auth.service;
 
 import com.servce.securitylab.auth.controller.model.SignInRequest;
 import com.servce.securitylab.auth.controller.model.SignUpRequest;
+import com.servce.securitylab.jwt.JwtProvider;
 import com.servce.securitylab.user.domain.User;
 import com.servce.securitylab.user.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +50,7 @@ public class AuthService {
     }
   }
 
-  public void authentication(SignInRequest signInRequest) {
+  public String authentication(SignInRequest signInRequest) {
     User user = userRepo.findByEmail(signInRequest.getEmail())
         .orElseThrow(
         () -> new IllegalArgumentException(INVALID_AUTHENTICATION_ERROR_MESSAGE)
@@ -59,7 +60,8 @@ public class AuthService {
     if(!matches){
       throw new IllegalArgumentException(INVALID_AUTHENTICATION_ERROR_MESSAGE);
     }
-    //todo jwt 발급 
+    //todo jwt 발급
+    return new JwtProvider().provider(user.getId());
 
 
   }
