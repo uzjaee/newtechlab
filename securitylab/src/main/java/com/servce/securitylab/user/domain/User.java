@@ -59,7 +59,7 @@ public class User {
     this.email = email;
     this.role = role;
   }
-  public static User of(String password, String nickname, String name, String email, Role role){
+  public static User of(String password, String email, String name,String nickname , Role role){
     return new User(password, nickname, name, email,role);
   }
 

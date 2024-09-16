@@ -2,6 +2,7 @@ package com.servce.securitylab.jwt;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
+import com.servce.securitylab.user.domain.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -16,12 +17,12 @@ public class JwtProvider {
   // id , email ,nickname ( pk .. uk)
   // newtech-server-secret-key-sparta-27io -> Base64 로 암호화된 키를 signWith에 넣기
 
-  public String provider(Long id){
-    String secretKey ="sample-secret-key";
+  public String provider(Long id, Role role){
+    String secretKey ="sample-secret-key-sample-secret-key-sample-secret-key-sample-secret-key-sample-secret-key";
 
-    SecretKey signingKey = getSiningKey(secretKey);
+    SecretKey signingKey = JwtUtils.getSiningKey(secretKey);
     Instant issuedAt = Instant.now();
-    Date expirationDate = getExpirationDate(issuedAt,30);
+    Date expirationDate = JwtUtils.getExpirationDate(issuedAt,30);
 
     return Jwts
         .builder()
@@ -31,24 +32,11 @@ public class JwtProvider {
 
         .audience().add("newtechlab client").and()  // 청중  => 발급 대상 모놀리틱 , Msa 임을 알 수 있다.
         .claim("id", id)
-
+        .claim("role", role)
         .signWith(signingKey)
         .compact();
   }
 
-  private SecretKey getSiningKey(String secretKey) {
-    // base64로 문자열 치환
-    byte[] keyBytes = Base64.getEncoder()
-        .withoutPadding()
-        .encode(secretKey.getBytes(UTF_8));
-    // sha알고리즘으로 암호화 된 키 생성
-    return Keys.hmacShaKeyFor(keyBytes);
-  }
 
-  private Date getExpirationDate(Instant issuedAt , int expirationMinutes) {
-    Instant expriationInstant =issuedAt
-        .plus(expirationMinutes, ChronoUnit.MINUTES);
-    return Date.from(expriationInstant);
-  }
 
 }

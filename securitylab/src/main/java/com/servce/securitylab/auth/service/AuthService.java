@@ -5,6 +5,7 @@ import com.servce.securitylab.auth.controller.model.SignUpRequest;
 import com.servce.securitylab.jwt.JwtProvider;
 import com.servce.securitylab.user.domain.User;
 import com.servce.securitylab.user.repo.UserRepo;
+import java.sql.SQLOutput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -60,7 +61,7 @@ public class AuthService {
     if(!matches){
       throw new IllegalArgumentException(INVALID_AUTHENTICATION_ERROR_MESSAGE);
     }
-    return new JwtProvider().provider(user.getId());
+    return new JwtProvider().provider(user.getId(),user.getRole());
 
 
   }
