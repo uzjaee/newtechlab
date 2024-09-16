@@ -1,8 +1,11 @@
 package com.servce.securitylab.auth.service;
 
+import com.servce.securitylab.auth.controller.model.SignInRequest;
 import com.servce.securitylab.auth.controller.model.SignUpRequest;
+import com.servce.securitylab.jwt.JwtProvider;
 import com.servce.securitylab.user.domain.User;
 import com.servce.securitylab.user.repo.UserRepo;
+import java.sql.SQLOutput;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +18,8 @@ public class AuthService {
 
   private static final String DUPLICATED_EMAIL_ERROR_MESSAGE = "이미 존재하는 이메일입니다.";
   private static final String DUPLICATED_NICKNAME_ERROR_MESSAGE = "이미 존재하는 닉네임입니다.";
+  public static final String INVALID_AUTHENTICATION_ERROR_MESSAGE = "사용자 정보가 올바르지 않습니다.";
+  
   private final UserRepo userRepo;
   private final PasswordEncoder passwordEncoder;
 
@@ -44,6 +49,21 @@ public class AuthService {
     if(exits){
       throw new IllegalArgumentException(DUPLICATED_EMAIL_ERROR_MESSAGE);
     }
+  }
+
+  public String authentication(SignInRequest signInRequest) {
+    User user = userRepo.findByEmail(signInRequest.getEmail())
+        .orElseThrow(
+        () -> new IllegalArgumentException(INVALID_AUTHENTICATION_ERROR_MESSAGE)
+    );
+    boolean matches = passwordEncoder.matches(signInRequest.getPassword(),user.getPassword());
+
+    if(!matches){
+      throw new IllegalArgumentException(INVALID_AUTHENTICATION_ERROR_MESSAGE);
+    }
+    return new JwtProvider().provider(user.getId(),user.getRole());
+
+
   }
 
 }

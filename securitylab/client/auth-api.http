@@ -6,5 +6,17 @@ Content-Type: application/json
   "password": "password",
   "name": "홍길동",
   "nickname": "Red홍",
-  "role" : "CUSTOMER"
+  "role" : "OWNER"
 }
+
+###
+POST http://localhost:8080/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "customer@foody.io",
+  "password": "password"
+}
+> {%
+  client.global.set("access_token", response.headers.valueOf("Authorization"))
+%}
